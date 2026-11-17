@@ -31,7 +31,8 @@ import { MensajeChat } from '../core/models';
           }
         </div>
 
-        <form class="entrada" (ngSubmit)="enviar()">
+        <!-- (submit) + preventDefault: evita que el navegador recargue la página al enviar -->
+        <form class="entrada" (submit)="$event.preventDefault(); enviar()">
           <input
             type="text"
             name="mensaje"
