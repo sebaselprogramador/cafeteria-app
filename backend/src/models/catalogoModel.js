@@ -25,7 +25,7 @@ async function obtenerFotosTienda() {
 
 async function obtenerPrecios() {
   return query(
-    'SELECT id, categoria, nombre, descripcion, precio, moneda FROM precios WHERE activo = 1 ORDER BY categoria, orden, id'
+    'SELECT id, categoria, nombre, descripcion, precio, moneda, imagen_url AS imagenUrl FROM precios WHERE activo = 1 ORDER BY categoria, orden, id'
   );
 }
 

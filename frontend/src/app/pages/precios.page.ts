@@ -26,7 +26,10 @@ import { EncabezadoComponent } from '../components/encabezado.component';
               <ul>
                 @for (item of grupo.items; track item.id) {
                   <li>
-                    <div>
+                    @if (item.imagenUrl) {
+                      <img class="foto" [src]="item.imagenUrl" [alt]="item.nombre" loading="lazy" width="64" height="64" />
+                    }
+                    <div class="info">
                       <span class="nombre">{{ item.nombre }}</span>
                       @if (item.descripcion) {
                         <small>{{ item.descripcion }}</small>
@@ -62,10 +65,23 @@ import { EncabezadoComponent } from '../components/encabezado.component';
 
     li {
       display: flex;
-      justify-content: space-between;
-      gap: 1rem;
+      align-items: center;
+      gap: 0.85rem;
       padding: 0.6rem 0;
       border-bottom: 1px dashed var(--borde);
+    }
+
+    .foto {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .info {
+      flex: 1;
+      min-width: 0;
     }
 
     li:last-child {

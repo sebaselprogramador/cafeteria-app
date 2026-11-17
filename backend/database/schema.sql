@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS precios (
   descripcion VARCHAR(255)  NULL,
   precio      DECIMAL(10,2) NOT NULL,
   moneda      VARCHAR(10)   NOT NULL DEFAULT 'Bs',
+  imagen_url  VARCHAR(500)  NULL,
   orden       INT           NOT NULL DEFAULT 0,
   activo      TINYINT(1)    NOT NULL DEFAULT 1
 ) ENGINE=InnoDB;

@@ -139,3 +139,9 @@ Los textos, precios y teléfonos de `seed.sql` son ficticios. Edítalos desde la
 - Las fotos de la tienda y de las especialidades usan `assets/placeholder.svg` hasta que se carguen imágenes reales.
 - El endpoint de chatbot guarda el historial en `chat_mensajes`.
 - No hay panel de administración: el contenido se actualiza en MySQL.
+
+## Créditos de imágenes
+
+- Foto de portada: propia del proyecto (`frontend/public/assets/portada.jpg`).
+- Fotos de productos, especialidades, local y video de Inicio: [Pexels](https://www.pexels.com/license/) (uso gratuito). Las URL están en `seed.sql`.
+

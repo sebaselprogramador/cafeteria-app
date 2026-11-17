@@ -65,6 +65,7 @@ INSERT INTO textos (clave, valor) VALUES
   ('error_carga',               'No se pudo cargar esta sección.'),
   ('menu_abrir',                'Abrir menú'),
   ('footer_derechos',           'Todos los derechos reservados.'),
+  ('footer_creditos',           'Fotos y video de productos y local: Pexels.'),
   -- Inicio
   ('hero_boton_primario',       'Ver precios'),
   ('hero_boton_primario_ruta',  '/precios'),
@@ -133,9 +134,12 @@ INSERT INTO textos (clave, valor) VALUES
 -- ---------------------------------------------------------------
 -- Contenido de cada sección
 -- ---------------------------------------------------------------
--- Video de fondo: desactivado (activo = 0) hasta poner un MP4 real de Pexels y cambiar activo a 1
+-- Video de fondo en bucle (Pexels, licencia gratuita)
 INSERT INTO videos_inicio (titulo, url_video, url_poster, fuente, activo) VALUES
-  ('Cafetería acogedora', 'https://REEMPLAZAR-con-mp4-de-pexels.mp4', NULL, 'https://www.pexels.com/', 0);
+  ('Arte latte en la barra',
+   'https://videos.pexels.com/video-files/2909914/2909914-sd_960_506_24fps.mp4',
+   'https://images.pexels.com/videos/2909914/free-video-2909914.jpg',
+   'https://www.pexels.com/video/coffee-making-art-by-a-bartender-2909914/', 1);
 
 INSERT INTO servicios (nombre, descripcion, icono, orden, activo) VALUES
   ('Cafetería de especialidad', 'Espresso, filtrados y métodos manuales con granos de origen.', '☕', 1, 1),
@@ -146,19 +150,19 @@ INSERT INTO servicios (nombre, descripcion, icono, orden, activo) VALUES
   ('Wi-Fi y espacio de trabajo','Mesas tranquilas y conexión estable para trabajar o estudiar.', '💻', 6, 1);
 
 INSERT INTO especialidades (nombre, descripcion, imagen_url, orden, activo) VALUES
-  ('Latte de vainilla',       'Espresso doble, leche texturizada y vainilla natural.',       '/assets/placeholder.svg', 1, 1),
-  ('Cold brew de la casa',    'Infusión en frío de 18 horas, servido con hielo y naranja.', '/assets/placeholder.svg', 2, 1),
-  ('Croissant de mantequilla','Laminado a mano, horneado en el momento.',                    '/assets/placeholder.svg', 3, 1),
-  ('Chocolate abuela',        'Chocolate espeso con canela, a la antigua.',                  '/assets/placeholder.svg', 4, 1);
+  ('Latte de vainilla',       'Espresso doble, leche texturizada y vainilla natural.',       'https://images.pexels.com/photos/11385490/pexels-photo-11385490.jpeg?auto=compress&cs=tinysrgb&w=800', 1, 1),
+  ('Cold brew de la casa',    'Infusión en frío de 18 horas, servido con hielo y naranja.', 'https://images.pexels.com/photos/36825773/pexels-photo-36825773.jpeg?auto=compress&cs=tinysrgb&w=800', 2, 1),
+  ('Croissant de mantequilla','Laminado a mano, horneado en el momento.',                    'https://images.pexels.com/photos/30403209/pexels-photo-30403209.jpeg?auto=compress&cs=tinysrgb&w=800', 3, 1),
+  ('Chocolate abuela',        'Chocolate espeso con canela, a la antigua.',                  'https://images.pexels.com/photos/12015600/pexels-photo-12015600.jpeg?auto=compress&cs=tinysrgb&w=800', 4, 1);
 
 INSERT INTO nosotros_secciones (titulo, contenido, orden) VALUES
   ('Nuestra historia', 'Café Don Richard nació en 2015 como un pequeño puesto de café de origen. Hoy seguimos tostando en lotes pequeños y trabajando directamente con productores.', 1),
   ('Nuestra misión',   'Ofrecer un café honesto, bien preparado y un espacio cálido para compartir.', 2);
 
 INSERT INTO fotos_tienda (imagen_url, descripcion, orden) VALUES
-  ('/assets/placeholder.svg', 'Barra de café',         1),
-  ('/assets/placeholder.svg', 'Salón principal',       2),
-  ('/assets/placeholder.svg', 'Vitrina de repostería', 3);
+  ('https://images.pexels.com/photos/20117299/pexels-photo-20117299.jpeg?auto=compress&cs=tinysrgb&w=800', 'Barra de café',         1),
+  ('https://images.pexels.com/photos/17412241/pexels-photo-17412241.jpeg?auto=compress&cs=tinysrgb&w=800', 'Salón principal',       2),
+  ('https://images.pexels.com/photos/29380152/pexels-photo-29380152.jpeg?auto=compress&cs=tinysrgb&w=800', 'Vitrina de repostería', 3);
 
 -- Zonas de mesas y mesas (ids fijos para poder referenciarlas abajo)
 INSERT INTO zonas_mesas (id, nombre, descripcion, icono, orden, activo) VALUES
@@ -184,11 +188,12 @@ INSERT INTO mesas (zona_id, codigo, capacidad, forma, orden, activo) VALUES
   (3, 'B4', 2, 'redonda',  4, 1),
   (4, 'P1', 12, 'larga',   1, 1);
 
-INSERT INTO precios (categoria, nombre, descripcion, precio, moneda, orden, activo) VALUES
-  ('Cafés calientes', 'Espresso',          'Shot simple',              10.00, 'Bs', 1, 1),
-  ('Cafés calientes', 'Cappuccino',        'Espresso con espuma',      18.00, 'Bs', 2, 1),
-  ('Cafés calientes', 'Latte',             'Espresso con leche',       20.00, 'Bs', 3, 1),
-  ('Cafés fríos',     'Cold brew',         'Servido con hielo',        22.00, 'Bs', 1, 1),
-  ('Cafés fríos',     'Frappé de moka',    'Batido con chocolate',     25.00, 'Bs', 2, 1),
-  ('Repostería',      'Croissant',         'Mantequilla',              12.00, 'Bs', 1, 1),
-  ('Repostería',      'Torta del día',     'Porción',                  15.00, 'Bs', 2, 1);
+-- Fotos del menú: Pexels (licencia gratuita, https://www.pexels.com/license/)
+INSERT INTO precios (categoria, nombre, descripcion, precio, moneda, imagen_url, orden, activo) VALUES
+  ('Cafés calientes', 'Espresso',       'Shot simple',          10.00, 'Bs', 'https://images.pexels.com/photos/9052283/pexels-photo-9052283.jpeg?auto=compress&cs=tinysrgb&w=400', 1, 1),
+  ('Cafés calientes', 'Cappuccino',     'Espresso con espuma',  18.00, 'Bs', 'https://images.pexels.com/photos/6747870/pexels-photo-6747870.jpeg?auto=compress&cs=tinysrgb&w=400', 2, 1),
+  ('Cafés calientes', 'Latte',          'Espresso con leche',   20.00, 'Bs', 'https://images.pexels.com/photos/38576602/pexels-photo-38576602.jpeg?auto=compress&cs=tinysrgb&w=400', 3, 1),
+  ('Cafés fríos',     'Cold brew',      'Servido con hielo',    22.00, 'Bs', 'https://images.pexels.com/photos/13302015/pexels-photo-13302015.jpeg?auto=compress&cs=tinysrgb&w=400', 1, 1),
+  ('Cafés fríos',     'Frappé de moka', 'Batido con chocolate', 25.00, 'Bs', 'https://images.pexels.com/photos/23708982/pexels-photo-23708982.jpeg?auto=compress&cs=tinysrgb&w=400', 2, 1),
+  ('Repostería',      'Croissant',      'Mantequilla',          12.00, 'Bs', 'https://images.pexels.com/photos/20002837/pexels-photo-20002837.jpeg?auto=compress&cs=tinysrgb&w=400', 1, 1),
+  ('Repostería',      'Torta del día',  'Porción',              15.00, 'Bs', 'https://images.pexels.com/photos/1854651/pexels-photo-1854651.jpeg?auto=compress&cs=tinysrgb&w=400', 2, 1);

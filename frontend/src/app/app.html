@@ -43,7 +43,12 @@
       <p>🕒 {{ sitio.c('horario') }}</p>
     </div>
   </div>
-  <p class="derechos">© {{ anio }} {{ sitio.c('nombre') }}. {{ sitio.t('footer_derechos') }}</p>
+  <p class="derechos">
+    © {{ anio }} {{ sitio.c('nombre') }}. {{ sitio.t('footer_derechos') }}
+    @if (sitio.t('footer_creditos')) {
+      <br />{{ sitio.t('footer_creditos') }}
+    }
+  </p>
 </footer>
 
 <app-chatbot />

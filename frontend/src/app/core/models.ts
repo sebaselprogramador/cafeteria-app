@@ -66,6 +66,7 @@ export interface ItemPrecio {
   descripcion: string | null;
   precio: number;
   moneda: string;
+  imagenUrl: string | null;
 }
 
 export interface GrupoPrecios {

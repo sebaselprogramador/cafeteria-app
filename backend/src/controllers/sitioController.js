@@ -87,6 +87,7 @@ async function precios(req, res, next) {
         descripcion: fila.descripcion,
         precio: Number(fila.precio),
         moneda: fila.moneda,
+        imagenUrl: fila.imagenUrl,
       });
     }
     res.json(
