@@ -19,14 +19,14 @@ DELETE FROM precios;
 -- Datos del local
 -- ---------------------------------------------------------------
 INSERT INTO configuracion (clave, valor) VALUES
-  ('nombre',            'Café Aroma'),
+  ('nombre',            'Café Don Richard'),
   ('slogan',            'Café de origen, hecho con calma'),
   ('icono',             '☕'),
-  ('hero_titulo',       'Bienvenido a Café Aroma'),
+  ('hero_titulo',       'Bienvenido a Café Don Richard'),
   ('hero_subtitulo',    'Granos seleccionados, repostería casera y un lugar para quedarte un rato.'),
   ('direccion',         'Av. Principal #123, Zona Centro, Ciudad'),
   ('telefono',          '+591 70000000'),
-  ('email',             'hola@cafearoma.example'),
+  ('email',             'hola@cafedonrichard.example'),
   ('horario',           'Lunes a viernes 07:00 - 21:00 · Sábados y domingos 08:00 - 22:00'),
   ('moneda',            'Bs');
 
@@ -35,7 +35,7 @@ INSERT INTO configuracion (clave, valor) VALUES
 -- ---------------------------------------------------------------
 INSERT INTO paginas (ruta, etiqueta_menu, titulo, descripcion, resumen, mostrar_en_inicio, orden, visible) VALUES
   ('',               'Inicio',         'Inicio',             NULL, NULL, 0, 1, 1),
-  ('servicios',      'Servicios',      'Nuestros servicios', 'Todo lo que puedes disfrutar en Café Aroma, desde tu primer café del día.', 'Lo que ofrecemos cada día.', 1, 2, 1),
+  ('servicios',      'Servicios',      'Nuestros servicios', 'Todo lo que puedes disfrutar en Café Don Richard, desde tu primer café del día.', 'Lo que ofrecemos cada día.', 1, 2, 1),
   ('especialidades', 'Especialidades', 'Especialidades',     'Las preparaciones que nos hacen únicos.', 'Nuestras bebidas y postres favoritos.', 1, 3, 1),
   ('nosotros',       'Nosotros',       'Nosotros',           'Conoce nuestra historia, dónde estamos y cómo es el local.', 'Historia, dirección y fotos del local.', 1, 4, 1),
   ('precios',        'Precios',        'Precios',            'Precios referenciales. Pueden variar según disponibilidad.', 'Consulta la carta completa.', 0, 5, 1),
@@ -80,7 +80,7 @@ INSERT INTO textos (clave, valor) VALUES
   ('form_error_envio',          'No se pudo enviar el mensaje. Intenta más tarde.'),
   -- Chatbot
   ('chatbot_titulo',            'Asistente del café'),
-  ('chatbot_saludo',            'Hola, soy el asistente de Café Aroma. ¿Qué te gustaría saber?'),
+  ('chatbot_saludo',            'Hola, soy el asistente de Café Don Richard. ¿Qué te gustaría saber?'),
   ('chatbot_placeholder',       'Pregunta por precios, horarios…'),
   ('chatbot_boton',             'Enviar'),
   ('chatbot_escribiendo',       'Escribiendo…'),
@@ -109,7 +109,7 @@ INSERT INTO especialidades (nombre, descripcion, imagen_url, orden, activo) VALU
   ('Chocolate abuela',        'Chocolate espeso con canela, a la antigua.',                  '/assets/placeholder.svg', 4, 1);
 
 INSERT INTO nosotros_secciones (titulo, contenido, orden) VALUES
-  ('Nuestra historia', 'Café Aroma nació en 2015 como un pequeño puesto de café de origen. Hoy seguimos tostando en lotes pequeños y trabajando directamente con productores.', 1),
+  ('Nuestra historia', 'Café Don Richard nació en 2015 como un pequeño puesto de café de origen. Hoy seguimos tostando en lotes pequeños y trabajando directamente con productores.', 1),
   ('Nuestra misión',   'Ofrecer un café honesto, bien preparado y un espacio cálido para compartir.', 2);
 
 INSERT INTO fotos_tienda (imagen_url, descripcion, orden) VALUES

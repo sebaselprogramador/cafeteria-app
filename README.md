@@ -1,4 +1,4 @@
-# ☕ Café Aroma — Web de cafetería
+# ☕ Café Don Richard — Web de cafetería
 
 Aplicación web de una cafetería con:
 
