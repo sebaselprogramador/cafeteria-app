@@ -41,7 +41,9 @@ INSERT INTO configuracion (clave, valor) VALUES
   ('reserva_intervalo_min',  '30'),
   ('reserva_duracion_min',   '90'),
   ('reserva_dias_max',       '60'),
-  ('reserva_personas_max',   '12');
+  ('reserva_personas_max',   '12'),
+  -- Segundos que la página espera la respuesta del chatbot antes de mostrar error
+  ('chatbot_espera_seg',     '200');
 
 -- ---------------------------------------------------------------
 -- Páginas del menú (la ruta '' es Inicio)

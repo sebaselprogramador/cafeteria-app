@@ -1,4 +1,5 @@
 import { Component, ElementRef, inject, signal, viewChild, OnInit } from '@angular/core';
+import { timeout } from 'rxjs';
 import { ApiService } from '../core/api.service';
 import { SitioService } from '../core/sitio.service';
 import { MensajeChat } from '../core/models';
@@ -175,7 +176,11 @@ export class ChatbotComponent implements OnInit {
     this.enviando.set(true);
     this.desplazarAlFinal();
 
-    this.api.enviarChat(this.sesionId, texto).subscribe({
+    // Límite de espera (configuracion.chatbot_espera_seg): si el backend no responde,
+    // se muestra el mensaje de error en vez de quedarse en "Escribiendo…" para siempre
+    const esperaMs = (Number(this.sitio.c('chatbot_espera_seg')) || 200) * 1000;
+
+    this.api.enviarChat(this.sesionId, texto).pipe(timeout(esperaMs)).subscribe({
       next: (r) => {
         this.mensajes.update((lista) => [...lista, { rol: 'assistant', texto: r.respuesta }]);
         this.enviando.set(false);
