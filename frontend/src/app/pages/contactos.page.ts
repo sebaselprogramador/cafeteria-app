@@ -1,55 +1,54 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../core/api.service';
+import { SitioService } from '../core/sitio.service';
+import { EncabezadoComponent } from '../components/encabezado.component';
 
 @Component({
   selector: 'app-contactos',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, EncabezadoComponent],
   template: `
     <section class="contenedor seccion">
-      <div class="encabezado-seccion">
-        <h1>Contactos</h1>
-        <p>¿Tienes una consulta, quieres reservar un evento o tienes una sugerencia? Escríbenos.</p>
-      </div>
+      <app-encabezado ruta="contactos" />
 
       <div class="dos-columnas">
         <form class="tarjeta formulario" [formGroup]="form" (ngSubmit)="enviar()" novalidate>
           <label>
-            Nombre *
+            {{ sitio.t('form_nombre') }}
             <input type="text" formControlName="nombre" autocomplete="name" />
           </label>
           @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
-            <small class="error">Ingresa tu nombre (mínimo 2 caracteres).</small>
+            <small class="error">{{ sitio.t('form_error_nombre') }}</small>
           }
 
           <label>
-            Correo electrónico *
+            {{ sitio.t('form_email') }}
             <input type="email" formControlName="email" autocomplete="email" />
           </label>
           @if (form.controls.email.touched && form.controls.email.invalid) {
-            <small class="error">Ingresa un correo válido.</small>
+            <small class="error">{{ sitio.t('form_error_email') }}</small>
           }
 
           <label>
-            Teléfono
+            {{ sitio.t('form_telefono') }}
             <input type="tel" formControlName="telefono" autocomplete="tel" />
           </label>
 
           <label>
-            Asunto
+            {{ sitio.t('form_asunto') }}
             <input type="text" formControlName="asunto" />
           </label>
 
           <label>
-            Mensaje *
+            {{ sitio.t('form_mensaje') }}
             <textarea rows="5" formControlName="mensaje"></textarea>
           </label>
           @if (form.controls.mensaje.touched && form.controls.mensaje.invalid) {
-            <small class="error">El mensaje debe tener al menos 5 caracteres.</small>
+            <small class="error">{{ sitio.t('form_error_mensaje') }}</small>
           }
 
           <button class="boton" type="submit" [disabled]="enviando()">
-            {{ enviando() ? 'Enviando…' : 'Enviar mensaje' }}
+            {{ enviando() ? sitio.t('form_enviando') : sitio.t('form_boton') }}
           </button>
 
           @if (exito()) {
@@ -61,9 +60,11 @@ import { ApiService } from '../core/api.service';
         </form>
 
         <aside class="tarjeta">
-          <h2>También puedes visitarnos</h2>
-          <p>Te esperamos con café recién preparado. Si llegas con un grupo, avísanos y reservamos tu mesa.</p>
-          <p>Para pedidos especiales o eventos privados, escríbenos con anticipación.</p>
+          <h2>{{ sitio.t('contacto_aside_titulo') }}</h2>
+          <p>{{ sitio.t('contacto_aside_texto') }}</p>
+          <p><strong>{{ sitio.t('etiqueta_direccion') }}:</strong> {{ sitio.c('direccion') }}</p>
+          <p><strong>{{ sitio.t('etiqueta_telefono') }}:</strong> {{ sitio.c('telefono') }}</p>
+          <p><strong>{{ sitio.t('etiqueta_email') }}:</strong> {{ sitio.c('email') }}</p>
         </aside>
       </div>
     </section>
@@ -128,6 +129,7 @@ import { ApiService } from '../core/api.service';
 })
 export class ContactosPage {
   private api = inject(ApiService);
+  protected sitio = inject(SitioService);
 
   protected form = new FormGroup({
     nombre: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2)] }),
@@ -158,7 +160,7 @@ export class ContactosPage {
         this.enviando.set(false);
       },
       error: (err) => {
-        this.errorEnvio.set(err?.error?.detalles?.join(' ') || err?.error?.error || 'No se pudo enviar el mensaje. Intenta más tarde.');
+        this.errorEnvio.set(err?.error?.detalles?.join(' ') || this.sitio.t('form_error_envio'));
         this.enviando.set(false);
       },
     });

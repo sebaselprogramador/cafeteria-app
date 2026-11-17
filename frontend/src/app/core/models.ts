@@ -1,13 +1,19 @@
 // Contratos de datos que devuelve la API Node.js
 
-export interface Configuracion {
-  nombre: string;
-  slogan: string;
-  direccion: string;
-  telefono: string;
-  email: string;
-  horario: string;
-  moneda: string;
+export interface Pagina {
+  ruta: string;
+  etiquetaMenu: string;
+  titulo: string;
+  descripcion: string | null;
+  resumen: string | null;
+  mostrarEnInicio: boolean;
+}
+
+// Respuesta de GET /api/sitio: tablas configuracion, textos y paginas
+export interface Sitio {
+  configuracion: Record<string, string>;
+  textos: Record<string, string>;
+  paginas: Pagina[];
 }
 
 export interface Inicio {

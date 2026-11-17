@@ -1,18 +1,23 @@
+@if (sitio.sinConexion()) {
+  <!-- Único texto fijo: sin conexión no hay base de datos de la que leer -->
+  <div class="sin-conexion" role="alert">No se pudo conectar con el servidor.</div>
+}
+
 <header class="cabecera">
   <div class="contenedor barra">
     <a routerLink="/" class="marca" (click)="cerrarMenu()">
-      <span class="marca-icono" aria-hidden="true">☕</span>
-      <span>{{ config()?.nombre || 'Cafetería' }}</span>
+      <span class="marca-icono" aria-hidden="true">{{ sitio.c('icono') }}</span>
+      <span>{{ sitio.c('nombre') }}</span>
     </a>
 
-    <button class="boton-menu" type="button" (click)="alternarMenu()" [attr.aria-expanded]="menuAbierto()" aria-label="Abrir menú">
+    <button class="boton-menu" type="button" (click)="alternarMenu()" [attr.aria-expanded]="menuAbierto()" [attr.aria-label]="sitio.t('menu_abrir')">
       ☰
     </button>
 
-    <nav class="menu" [class.abierto]="menuAbierto()" aria-label="Principal">
-      @for (enlace of enlaces; track enlace.ruta) {
-        <a [routerLink]="enlace.ruta" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: enlace.ruta === '/' }" (click)="cerrarMenu()">
-          {{ enlace.texto }}
+    <nav class="menu" [class.abierto]="menuAbierto()">
+      @for (pagina of sitio.paginas(); track pagina.ruta) {
+        <a [routerLink]="'/' + pagina.ruta" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: pagina.ruta === '' }" (click)="cerrarMenu()">
+          {{ pagina.etiquetaMenu }}
         </a>
       }
     </nav>
@@ -26,19 +31,19 @@
 <footer class="pie">
   <div class="contenedor pie-grid">
     <div>
-      <strong>{{ config()?.nombre || 'Cafetería' }}</strong>
-      <p>{{ config()?.slogan }}</p>
+      <strong>{{ sitio.c('nombre') }}</strong>
+      <p>{{ sitio.c('slogan') }}</p>
     </div>
     <div>
-      <p>📍 {{ config()?.direccion }}</p>
-      <p>📞 {{ config()?.telefono }}</p>
-      <p>✉️ {{ config()?.email }}</p>
+      <p>📍 {{ sitio.c('direccion') }}</p>
+      <p>📞 {{ sitio.c('telefono') }}</p>
+      <p>✉️ {{ sitio.c('email') }}</p>
     </div>
     <div>
-      <p>🕒 {{ config()?.horario }}</p>
+      <p>🕒 {{ sitio.c('horario') }}</p>
     </div>
   </div>
-  <p class="derechos">© {{ anio }} {{ config()?.nombre }}. Todos los derechos reservados.</p>
+  <p class="derechos">© {{ anio }} {{ sitio.c('nombre') }}. {{ sitio.t('footer_derechos') }}</p>
 </footer>
 
 <app-chatbot />

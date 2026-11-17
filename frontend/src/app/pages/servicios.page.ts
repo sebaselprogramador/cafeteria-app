@@ -1,27 +1,29 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { ApiService } from '../core/api.service';
+import { SitioService } from '../core/sitio.service';
 import { Servicio } from '../core/models';
+import { EncabezadoComponent } from '../components/encabezado.component';
 
 @Component({
   selector: 'app-servicios',
+  imports: [EncabezadoComponent],
   template: `
     <section class="contenedor seccion">
-      <div class="encabezado-seccion">
-        <h1>Nuestros servicios</h1>
-        <p>Todo lo que puedes disfrutar en Café Aroma, desde tu primer café del día.</p>
-      </div>
+      <app-encabezado ruta="servicios" />
 
       @if (cargando()) {
-        <p class="cargando">Cargando servicios…</p>
+        <p class="cargando">{{ sitio.t('cargando') }}</p>
       } @else if (error()) {
-        <p class="error">No se pudieron cargar los servicios.</p>
+        <p class="error">{{ sitio.t('error_carga') }}</p>
       } @else if (servicios().length === 0) {
-        <p class="vacio">Pronto publicaremos nuestros servicios.</p>
+        <p class="vacio">{{ sitio.t('vacio') }}</p>
       } @else {
         <div class="grid-tarjetas">
           @for (servicio of servicios(); track servicio.id) {
             <article class="tarjeta">
-              <span class="icono" aria-hidden="true">{{ iconos[servicio.icono ?? ''] || '✨' }}</span>
+              @if (servicio.icono) {
+                <span class="icono" aria-hidden="true">{{ servicio.icono }}</span>
+              }
               <h3>{{ servicio.nombre }}</h3>
               <p>{{ servicio.descripcion }}</p>
             </article>
@@ -47,20 +49,11 @@ import { Servicio } from '../core/models';
 })
 export class ServiciosPage implements OnInit {
   private api = inject(ApiService);
+  protected sitio = inject(SitioService);
 
   protected servicios = signal<Servicio[]>([]);
   protected cargando = signal(true);
   protected error = signal(false);
-
-  // Mapa de nombres de icono (guardados en la base de datos) a emojis
-  protected iconos: Record<string, string> = {
-    coffee: '☕',
-    sun: '🌤️',
-    cake: '🍰',
-    users: '👥',
-    bag: '🛍️',
-    laptop: '💻',
-  };
 
   ngOnInit(): void {
     this.api.servicios().subscribe({

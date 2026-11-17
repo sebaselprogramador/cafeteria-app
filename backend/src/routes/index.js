@@ -10,7 +10,7 @@ router.get('/health', (req, res) => res.json({ ok: true }));
 
 // Contenido de cada página del frontend
 router.get('/inicio', sitio.inicio);
-router.get('/configuracion', sitio.configuracion);
+router.get('/sitio', sitio.datosSitio);
 router.get('/servicios', sitio.servicios);
 router.get('/especialidades', sitio.especialidades);
 router.get('/nosotros', sitio.nosotros);

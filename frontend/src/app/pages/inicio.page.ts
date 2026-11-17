@@ -1,6 +1,7 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../core/api.service';
+import { SitioService } from '../core/sitio.service';
 import { Inicio } from '../core/models';
 
 @Component({
@@ -24,27 +25,35 @@ import { Inicio } from '../core/models';
 
       <div class="contenedor hero-contenido">
         @if (cargando()) {
-          <p class="hero-cargando">Cargando…</p>
+          <p>{{ sitio.t('cargando') }}</p>
         } @else if (error()) {
-          <h1>Bienvenido</h1>
-          <p class="error">No pudimos cargar el contenido. Revisa que la API esté activa.</p>
+          <p>{{ sitio.t('error_carga') }}</p>
         } @else {
           <p class="eyebrow">{{ inicio()?.slogan }}</p>
           <h1>{{ inicio()?.heroTitulo }}</h1>
           <p class="subtitulo">{{ inicio()?.heroSubtitulo }}</p>
           <div class="acciones">
-            <a class="boton" routerLink="/precios">Ver precios</a>
-            <a class="boton secundario" routerLink="/contactos">Contáctanos</a>
+            @if (sitio.t('hero_boton_primario')) {
+              <a class="boton" [routerLink]="sitio.t('hero_boton_primario_ruta')">{{ sitio.t('hero_boton_primario') }}</a>
+            }
+            @if (sitio.t('hero_boton_secundario')) {
+              <a class="boton secundario" [routerLink]="sitio.t('hero_boton_secundario_ruta')">{{ sitio.t('hero_boton_secundario') }}</a>
+            }
           </div>
         }
       </div>
     </section>
 
-    <section class="contenedor seccion atajos">
-      <a class="tarjeta" routerLink="/servicios"><h3>Servicios</h3><p>Lo que ofrecemos cada día.</p></a>
-      <a class="tarjeta" routerLink="/especialidades"><h3>Especialidades</h3><p>Nuestras bebidas y postres favoritos.</p></a>
-      <a class="tarjeta" routerLink="/nosotros"><h3>Nosotros</h3><p>Historia, dirección y fotos del local.</p></a>
-    </section>
+    @if (atajos().length) {
+      <section class="contenedor seccion atajos">
+        @for (pagina of atajos(); track pagina.ruta) {
+          <a class="tarjeta" [routerLink]="'/' + pagina.ruta">
+            <h3>{{ pagina.titulo }}</h3>
+            <p>{{ pagina.resumen }}</p>
+          </a>
+        }
+      </section>
+    }
   `,
   styles: `
     .hero {
@@ -106,11 +115,6 @@ import { Inicio } from '../core/models';
       margin-top: 1.5rem;
     }
 
-    .hero-cargando,
-    .hero .error {
-      color: #fff;
-    }
-
     .atajos {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -134,10 +138,14 @@ import { Inicio } from '../core/models';
 })
 export class InicioPage implements OnInit {
   private api = inject(ApiService);
+  protected sitio = inject(SitioService);
 
   protected inicio = signal<Inicio | null>(null);
   protected cargando = signal(true);
   protected error = signal(false);
+
+  // Tarjetas de acceso rápido: páginas marcadas con mostrar_en_inicio = 1
+  protected atajos = computed(() => this.sitio.paginas().filter((p) => p.mostrarEnInicio));
 
   ngOnInit(): void {
     this.api.inicio().subscribe({

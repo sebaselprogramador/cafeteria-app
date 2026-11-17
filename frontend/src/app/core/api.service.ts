@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
-  Configuracion,
+  Sitio,
   ContactoPayload,
   Especialidad,
   GrupoPrecios,
@@ -22,8 +22,8 @@ export class ApiService {
     return this.http.get<Inicio>(`${this.base}/inicio`);
   }
 
-  configuracion(): Observable<Configuracion> {
-    return this.http.get<Configuracion>(`${this.base}/configuracion`);
+  sitio(): Observable<Sitio> {
+    return this.http.get<Sitio>(`${this.base}/sitio`);
   }
 
   servicios(): Observable<Servicio[]> {

@@ -15,6 +15,25 @@ CREATE TABLE IF NOT EXISTS configuracion (
   actualizado TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+-- Textos de la interfaz: botones, etiquetas del formulario, mensajes del chatbot, pie de página
+CREATE TABLE IF NOT EXISTS textos (
+  clave       VARCHAR(60)  PRIMARY KEY,
+  valor       TEXT         NOT NULL
+) ENGINE=InnoDB;
+
+-- Páginas del menú: etiqueta, título, descripción y tarjeta resumen en Inicio
+CREATE TABLE IF NOT EXISTS paginas (
+  id                INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  ruta              VARCHAR(60)  NOT NULL UNIQUE,
+  etiqueta_menu     VARCHAR(60)  NOT NULL,
+  titulo            VARCHAR(120) NOT NULL,
+  descripcion       VARCHAR(255) NULL,
+  resumen           VARCHAR(255) NULL,
+  mostrar_en_inicio TINYINT(1)   NOT NULL DEFAULT 0,
+  orden             INT          NOT NULL DEFAULT 0,
+  visible           TINYINT(1)   NOT NULL DEFAULT 1
+) ENGINE=InnoDB;
+
 -- Videos en bucle para la página de Inicio (Pexels)
 CREATE TABLE IF NOT EXISTS videos_inicio (
   id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

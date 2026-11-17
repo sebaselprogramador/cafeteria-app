@@ -6,12 +6,14 @@ import { NosotrosPage } from './pages/nosotros.page';
 import { PreciosPage } from './pages/precios.page';
 import { ContactosPage } from './pages/contactos.page';
 
+// Cada ruta solo indica qué componente se muestra.
+// Etiquetas del menú, títulos y descripciones vienen de la tabla `paginas` (clave `pagina`).
 export const routes: Routes = [
-  { path: '', component: InicioPage, title: 'Inicio · Café Aroma' },
-  { path: 'servicios', component: ServiciosPage, title: 'Servicios · Café Aroma' },
-  { path: 'especialidades', component: EspecialidadesPage, title: 'Especialidades · Café Aroma' },
-  { path: 'nosotros', component: NosotrosPage, title: 'Nosotros · Café Aroma' },
-  { path: 'precios', component: PreciosPage, title: 'Precios · Café Aroma' },
-  { path: 'contactos', component: ContactosPage, title: 'Contactos · Café Aroma' },
+  { path: '', component: InicioPage, data: { pagina: '' } },
+  { path: 'servicios', component: ServiciosPage, data: { pagina: 'servicios' } },
+  { path: 'especialidades', component: EspecialidadesPage, data: { pagina: 'especialidades' } },
+  { path: 'nosotros', component: NosotrosPage, data: { pagina: 'nosotros' } },
+  { path: 'precios', component: PreciosPage, data: { pagina: 'precios' } },
+  { path: 'contactos', component: ContactosPage, data: { pagina: 'contactos' } },
   { path: '**', redirectTo: '' },
 ];

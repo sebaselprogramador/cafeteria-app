@@ -1,31 +1,29 @@
 const { chatConOllama } = require('./ollamaClient');
-const { obtenerConfiguracion } = require('../models/sitioModel');
+const { obtenerConfiguracion, obtenerTexto } = require('../models/sitioModel');
 const { obtenerServicios, obtenerPrecios, obtenerEspecialidades } = require('../models/catalogoModel');
 const { guardarMensaje, obtenerHistorial } = require('../models/chatModel');
 
 // Construye el contexto del local a partir de la base de datos.
 // Así el bot responde solo con información real de la cafetería.
 async function construirPromptSistema() {
-  const [config, servicios, especialidades, precios] = await Promise.all([
+  const [config, instrucciones, servicios, especialidades, precios] = await Promise.all([
     obtenerConfiguracion(),
+    obtenerTexto('chatbot_instrucciones'),
     obtenerServicios(),
     obtenerEspecialidades(),
     obtenerPrecios(),
   ]);
 
-  const lineasPrecios = precios
-    .map((p) => `- ${p.categoria}: ${p.nombre} (${p.descripcion || ''}) ${p.precio} ${p.moneda}`)
-    .join('\n');
-
+  // Las instrucciones de comportamiento vienen de la tabla `textos`;
+  // los datos del local, de `configuracion`, `servicios`, `especialidades` y `precios`.
   return [
-    `Eres el asistente virtual de ${config.nombre || 'la cafetería'}.`,
-    'Responde siempre en español, de forma breve, amable y clara.',
-    'Usa únicamente la información de este contexto. Si no sabes algo, di que no tienes ese dato y sugiere contactar al local.',
+    `Asistente virtual de: ${config.nombre}`,
+    instrucciones,
     '',
-    `Dirección: ${config.direccion || 'No disponible'}`,
-    `Teléfono: ${config.telefono || 'No disponible'}`,
-    `Correo: ${config.email || 'No disponible'}`,
-    `Horario: ${config.horario || 'No disponible'}`,
+    `Dirección: ${config.direccion}`,
+    `Teléfono: ${config.telefono}`,
+    `Correo: ${config.email}`,
+    `Horario: ${config.horario}`,
     '',
     'Servicios:',
     ...servicios.map((s) => `- ${s.nombre}: ${s.descripcion || ''}`),
@@ -34,7 +32,7 @@ async function construirPromptSistema() {
     ...especialidades.map((e) => `- ${e.nombre}: ${e.descripcion || ''}`),
     '',
     'Precios:',
-    lineasPrecios || '- Sin precios registrados',
+    ...precios.map((p) => `- ${p.categoria}: ${p.nombre} (${p.descripcion || ''}) ${p.precio} ${p.moneda}`),
   ].join('\n');
 }
 

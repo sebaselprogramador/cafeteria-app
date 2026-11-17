@@ -8,7 +8,23 @@ Aplicación web de una cafetería con:
 - **Chatbot**: Ollama con el modelo `gemma3`, integrado en la API
 - **Videos**: Pexels (video en bucle en Inicio)
 
-Todas las páginas del frontend obtienen sus datos desde la API Node.js (nunca de datos fijos en el código).
+Todas las páginas del frontend obtienen sus datos desde la API Node.js: nada de contenido fijo en el código.
+
+| Tabla                | Qué controla                                                             |
+| -------------------- | ------------------------------------------------------------------------ |
+| `configuracion`      | Nombre, ícono, slogan, textos de portada, dirección, teléfono, correo, horario |
+| `paginas`            | Menú: etiqueta, título, descripción, tarjeta en Inicio, orden y visibilidad |
+| `textos`             | Botones, etiquetas del formulario, mensajes, pie, chatbot (saludo e instrucciones) |
+| `videos_inicio`      | Video en bucle de Pexels                                                 |
+| `servicios`          | Servicios (con ícono emoji)                                              |
+| `especialidades`     | Especialidades con imagen                                                |
+| `nosotros_secciones` | Historia / misión                                                        |
+| `fotos_tienda`       | Galería de la tienda                                                     |
+| `precios`            | Carta de precios por categoría                                           |
+| `contactos`          | Mensajes recibidos del formulario                                        |
+| `chat_mensajes`      | Historial del chatbot                                                    |
+
+El único texto fijo es el aviso "No se pudo conectar con el servidor", que se muestra justamente cuando la base de datos no está disponible.
 
 ## Páginas
 
@@ -29,7 +45,7 @@ Además hay un chatbot flotante (💬) que responde con la información del loca
 | ------ | --------------------- | --------------------------------------------- |
 | GET    | `/health`             | Estado del servidor                           |
 | GET    | `/inicio`             | Textos de portada y video                     |
-| GET    | `/configuracion`      | Nombre, dirección, teléfono, correo, horario  |
+| GET    | `/sitio`              | Tablas `configuracion`, `textos` y `paginas` (menú, títulos, etiquetas) |
 | GET    | `/servicios`          | Lista de servicios                            |
 | GET    | `/especialidades`     | Lista de especialidades                       |
 | GET    | `/nosotros`           | Secciones de historia, fotos y contacto       |

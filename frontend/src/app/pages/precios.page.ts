@@ -1,24 +1,23 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ApiService } from '../core/api.service';
+import { SitioService } from '../core/sitio.service';
 import { GrupoPrecios } from '../core/models';
+import { EncabezadoComponent } from '../components/encabezado.component';
 
 @Component({
   selector: 'app-precios',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, EncabezadoComponent],
   template: `
     <section class="contenedor seccion">
-      <div class="encabezado-seccion">
-        <h1>Precios</h1>
-        <p>Precios referenciales. Pueden variar según disponibilidad.</p>
-      </div>
+      <app-encabezado ruta="precios" />
 
       @if (cargando()) {
-        <p class="cargando">Cargando precios…</p>
+        <p class="cargando">{{ sitio.t('cargando') }}</p>
       } @else if (error()) {
-        <p class="error">No se pudieron cargar los precios.</p>
+        <p class="error">{{ sitio.t('error_carga') }}</p>
       } @else if (grupos().length === 0) {
-        <p class="vacio">Lista de precios en preparación.</p>
+        <p class="vacio">{{ sitio.t('vacio') }}</p>
       } @else {
         <div class="grid-precios">
           @for (grupo of grupos(); track grupo.categoria) {
@@ -87,6 +86,7 @@ import { GrupoPrecios } from '../core/models';
 })
 export class PreciosPage implements OnInit {
   private api = inject(ApiService);
+  protected sitio = inject(SitioService);
 
   protected grupos = signal<GrupoPrecios[]>([]);
   protected cargando = signal(true);

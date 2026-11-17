@@ -20,19 +20,15 @@ async function inicio(req, res, next) {
   }
 }
 
-// GET /api/configuracion  → datos de contacto y del local (footer, contactos)
-async function configuracion(req, res, next) {
+// GET /api/sitio  → datos del local, textos de la interfaz y páginas del menú
+async function datosSitio(req, res, next) {
   try {
-    const datos = await sitio.obtenerConfiguracion();
-    res.json({
-      nombre: datos.nombre,
-      slogan: datos.slogan,
-      direccion: datos.direccion,
-      telefono: datos.telefono,
-      email: datos.email,
-      horario: datos.horario,
-      moneda: datos.moneda,
-    });
+    const [configuracion, textos, paginas] = await Promise.all([
+      sitio.obtenerConfiguracion(),
+      sitio.obtenerTextos(),
+      sitio.obtenerPaginas(),
+    ]);
+    res.json({ configuracion, textos, paginas });
   } catch (error) {
     next(error);
   }
@@ -99,4 +95,4 @@ async function precios(req, res, next) {
   }
 }
 
-module.exports = { inicio, configuracion, servicios, especialidades, nosotros, precios };
+module.exports = { inicio, datosSitio, servicios, especialidades, nosotros, precios };

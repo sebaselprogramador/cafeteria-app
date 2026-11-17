@@ -1,32 +1,29 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { ApiService } from '../core/api.service';
+import { SitioService } from '../core/sitio.service';
 import { Especialidad } from '../core/models';
+import { EncabezadoComponent } from '../components/encabezado.component';
 
 @Component({
   selector: 'app-especialidades',
+  imports: [EncabezadoComponent],
   template: `
     <section class="contenedor seccion">
-      <div class="encabezado-seccion">
-        <h1>Especialidades</h1>
-        <p>Las preparaciones que nos hacen únicos.</p>
-      </div>
+      <app-encabezado ruta="especialidades" />
 
       @if (cargando()) {
-        <p class="cargando">Cargando especialidades…</p>
+        <p class="cargando">{{ sitio.t('cargando') }}</p>
       } @else if (error()) {
-        <p class="error">No se pudieron cargar las especialidades.</p>
+        <p class="error">{{ sitio.t('error_carga') }}</p>
       } @else if (especialidades().length === 0) {
-        <p class="vacio">Próximamente nuevas especialidades.</p>
+        <p class="vacio">{{ sitio.t('vacio') }}</p>
       } @else {
         <div class="grid-tarjetas">
           @for (item of especialidades(); track item.id) {
             <article class="tarjeta">
-              <img
-                class="imagen"
-                [src]="item.imagenUrl || '/assets/placeholder.svg'"
-                [alt]="item.nombre"
-                loading="lazy"
-              />
+              @if (item.imagenUrl) {
+                <img class="imagen" [src]="item.imagenUrl" [alt]="item.nombre" loading="lazy" />
+              }
               <h3>{{ item.nombre }}</h3>
               <p>{{ item.descripcion }}</p>
             </article>
@@ -56,6 +53,7 @@ import { Especialidad } from '../core/models';
 })
 export class EspecialidadesPage implements OnInit {
   private api = inject(ApiService);
+  protected sitio = inject(SitioService);
 
   protected especialidades = signal<Especialidad[]>([]);
   protected cargando = signal(true);

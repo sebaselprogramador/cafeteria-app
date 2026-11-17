@@ -1,30 +1,33 @@
 import { Component, ElementRef, inject, signal, viewChild, OnInit } from '@angular/core';
 import { ApiService } from '../core/api.service';
+import { SitioService } from '../core/sitio.service';
 import { MensajeChat } from '../core/models';
 
-// Widget flotante del chatbot (backend Node.js → Ollama con gemma3)
+// Widget flotante del chatbot (backend Node.js → Ollama con gemma3).
+// Título, saludo, placeholder y mensajes vienen de la tabla `textos`.
 @Component({
   selector: 'app-chatbot',
   template: `
-    <button class="lanzador" type="button" (click)="alternar()" [attr.aria-expanded]="abierto()" aria-label="Abrir asistente">
+    <button class="lanzador" type="button" (click)="alternar()" [attr.aria-expanded]="abierto()" [attr.aria-label]="sitio.t('chatbot_titulo')">
       {{ abierto() ? '✕' : '💬' }}
     </button>
 
     @if (abierto()) {
-      <section class="panel" aria-label="Asistente de Café Aroma">
+      <section class="panel" [attr.aria-label]="sitio.t('chatbot_titulo')">
         <header>
-          <strong>Asistente del café</strong>
-          @if (estado() === 'sin-ollama') {
-            <small>Ollama no disponible</small>
+          <strong>{{ sitio.t('chatbot_titulo') }}</strong>
+          @if (!disponible()) {
+            <small>{{ sitio.t('chatbot_no_disponible') }}</small>
           }
         </header>
 
         <div class="mensajes" #contenedor>
+          <div class="burbuja">{{ sitio.t('chatbot_saludo') }}</div>
           @for (m of mensajes(); track $index) {
             <div class="burbuja" [class.usuario]="m.rol === 'user'">{{ m.texto }}</div>
           }
           @if (enviando()) {
-            <div class="burbuja escribiendo">Escribiendo…</div>
+            <div class="burbuja escribiendo">{{ sitio.t('chatbot_escribiendo') }}</div>
           }
         </div>
 
@@ -34,11 +37,11 @@ import { MensajeChat } from '../core/models';
             name="mensaje"
             [value]="borrador()"
             (input)="borrador.set($any($event.target).value)"
-            placeholder="Pregunta por precios, horarios…"
+            [placeholder]="sitio.t('chatbot_placeholder')"
             maxlength="500"
             autocomplete="off"
           />
-          <button class="boton" type="submit" [disabled]="enviando() || !borrador().trim()">Enviar</button>
+          <button class="boton" type="submit" [disabled]="enviando() || !borrador().trim()">{{ sitio.t('chatbot_boton') }}</button>
         </form>
       </section>
     }
@@ -80,9 +83,10 @@ import { MensajeChat } from '../core/models';
       display: flex;
       justify-content: space-between;
       align-items: baseline;
+      gap: 0.5rem;
       padding: 0.75rem 1rem;
       background: var(--cafe-oscuro);
-      color: var(--crema);
+      color: var(--claro);
     }
 
     .mensajes {
@@ -139,22 +143,21 @@ import { MensajeChat } from '../core/models';
 })
 export class ChatbotComponent implements OnInit {
   private api = inject(ApiService);
+  protected sitio = inject(SitioService);
   private contenedor = viewChild<ElementRef<HTMLDivElement>>('contenedor');
 
   protected abierto = signal(false);
   protected enviando = signal(false);
   protected borrador = signal('');
-  protected estado = signal<'listo' | 'sin-ollama' | 'desconocido'>('desconocido');
-  protected mensajes = signal<MensajeChat[]>([
-    { rol: 'assistant', texto: 'Hola, soy el asistente de la cafetería. ¿Qué te gustaría saber?' },
-  ]);
+  protected disponible = signal(true);
+  protected mensajes = signal<MensajeChat[]>([]);
 
   private sesionId = this.obtenerSesion();
 
   ngOnInit(): void {
     this.api.estadoChat().subscribe({
-      next: (e) => this.estado.set(e.disponible ? 'listo' : 'sin-ollama'),
-      error: () => this.estado.set('sin-ollama'),
+      next: (e) => this.disponible.set(e.disponible && e.modeloListo !== false),
+      error: () => this.disponible.set(false),
     });
   }
 
@@ -177,9 +180,8 @@ export class ChatbotComponent implements OnInit {
         this.enviando.set(false);
         this.desplazarAlFinal();
       },
-      error: (err) => {
-        const aviso = err?.error?.error || 'No pude responder en este momento. Intenta de nuevo.';
-        this.mensajes.update((lista) => [...lista, { rol: 'assistant', texto: aviso }]);
+      error: () => {
+        this.mensajes.update((lista) => [...lista, { rol: 'assistant', texto: this.sitio.t('chatbot_error') }]);
         this.enviando.set(false);
         this.desplazarAlFinal();
       },
