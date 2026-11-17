@@ -21,6 +21,8 @@ export interface Inicio {
   slogan: string;
   heroTitulo: string;
   heroSubtitulo: string;
+  heroImagen: string | null;
+  heroImagenAlt: string;
   video: { id: number; titulo: string; urlVideo: string; urlPoster: string | null; fuente: string | null } | null;
 }
 
@@ -77,6 +79,34 @@ export interface ContactoPayload {
   telefono?: string;
   asunto?: string;
   mensaje: string;
+}
+
+export interface Mesa {
+  id: number;
+  codigo: string;
+  capacidad: number;
+  forma: 'redonda' | 'cuadrada' | 'larga';
+  /** null cuando no se consultó una fecha y hora concretas */
+  disponible: boolean | null;
+}
+
+export interface ZonaMesas {
+  id: number;
+  nombre: string;
+  descripcion: string | null;
+  icono: string | null;
+  mesas: Mesa[];
+}
+
+export interface ReservaPayload {
+  mesaId: number;
+  nombre: string;
+  email: string;
+  telefono?: string;
+  fecha: string;
+  hora: string;
+  personas: number;
+  comentario?: string;
 }
 
 export interface MensajeChat {

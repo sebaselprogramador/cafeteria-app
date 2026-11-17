@@ -103,6 +103,46 @@ CREATE TABLE IF NOT EXISTS contactos (
   creado_en   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+-- Zonas del local donde hay mesas (Salón, Terraza, Barra…)
+CREATE TABLE IF NOT EXISTS zonas_mesas (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nombre      VARCHAR(80)  NOT NULL,
+  descripcion VARCHAR(255) NULL,
+  icono       VARCHAR(16)  NULL,
+  orden       INT          NOT NULL DEFAULT 0,
+  activo      TINYINT(1)   NOT NULL DEFAULT 1
+) ENGINE=InnoDB;
+
+-- Mesas de cada zona
+CREATE TABLE IF NOT EXISTS mesas (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  zona_id     INT UNSIGNED NOT NULL,
+  codigo      VARCHAR(10)  NOT NULL,
+  capacidad   TINYINT UNSIGNED NOT NULL,
+  forma       ENUM('redonda','cuadrada','larga') NOT NULL DEFAULT 'cuadrada',
+  orden       INT          NOT NULL DEFAULT 0,
+  activo      TINYINT(1)   NOT NULL DEFAULT 1,
+  UNIQUE KEY uq_mesa_codigo (codigo),
+  CONSTRAINT fk_mesa_zona FOREIGN KEY (zona_id) REFERENCES zonas_mesas(id)
+) ENGINE=InnoDB;
+
+-- Reservas de mesas
+CREATE TABLE IF NOT EXISTS reservas (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  mesa_id     INT UNSIGNED NOT NULL,
+  nombre      VARCHAR(120) NOT NULL,
+  email       VARCHAR(150) NOT NULL,
+  telefono    VARCHAR(30)  NULL,
+  fecha       DATE         NOT NULL,
+  hora        TIME         NOT NULL,
+  personas    TINYINT UNSIGNED NOT NULL,
+  comentario  VARCHAR(500) NULL,
+  estado      ENUM('pendiente','confirmada','cancelada') NOT NULL DEFAULT 'confirmada',
+  creado_en   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_reserva_mesa_fecha (mesa_id, fecha),
+  CONSTRAINT fk_reserva_mesa FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+) ENGINE=InnoDB;
+
 -- Historial del chatbot (Ollama + gemma3)
 CREATE TABLE IF NOT EXISTS chat_mensajes (
   id          BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

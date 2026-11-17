@@ -21,6 +21,9 @@ Todas las páginas del frontend obtienen sus datos desde la API Node.js: nada de
 | `nosotros_secciones` | Historia / misión                                                        |
 | `fotos_tienda`       | Galería de la tienda                                                     |
 | `precios`            | Carta de precios por categoría                                           |
+| `zonas_mesas`        | Zonas del local (Salón, Terraza, Barra, Sala privada)                    |
+| `mesas`              | Mesas de cada zona: código, capacidad y forma                            |
+| `reservas`           | Reservas de mesa (fecha, hora, personas, datos de contacto)              |
 | `contactos`          | Mensajes recibidos del formulario                                        |
 | `chat_mensajes`      | Historial del chatbot                                                    |
 
@@ -50,6 +53,8 @@ Además hay un chatbot flotante (💬) que responde con la información del loca
 | GET    | `/especialidades`     | Lista de especialidades                       |
 | GET    | `/nosotros`           | Secciones de historia, fotos y contacto       |
 | GET    | `/precios`            | Precios agrupados por categoría               |
+| GET    | `/mesas?fecha&hora`   | Zonas con mesas y disponibilidad para ese horario |
+| POST   | `/reservas`           | Crea una reserva (evita dobles reservas con transacción) |
 | POST   | `/contactos`          | Guarda un mensaje del formulario              |
 | POST   | `/chatbot`            | Envía un mensaje al chatbot (`sesionId`, `mensaje`) |
 | GET    | `/chatbot/estado`     | Indica si Ollama y gemma3 están disponibles   |

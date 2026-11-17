@@ -13,6 +13,8 @@ async function inicio(req, res, next) {
       slogan: configuracion.slogan,
       heroTitulo: configuracion.hero_titulo,
       heroSubtitulo: configuracion.hero_subtitulo,
+      heroImagen: configuracion.hero_imagen || null,
+      heroImagenAlt: configuracion.hero_imagen_alt || '',
       video: videos[0] || null,
     });
   } catch (error) {

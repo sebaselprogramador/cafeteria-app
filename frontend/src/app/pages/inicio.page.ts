@@ -23,23 +23,32 @@ import { Inicio } from '../core/models';
       }
       <div class="hero-velo"></div>
 
-      <div class="contenedor hero-contenido">
-        @if (cargando()) {
-          <p>{{ sitio.t('cargando') }}</p>
-        } @else if (error()) {
-          <p>{{ sitio.t('error_carga') }}</p>
-        } @else {
-          <p class="eyebrow">{{ inicio()?.slogan }}</p>
-          <h1>{{ inicio()?.heroTitulo }}</h1>
-          <p class="subtitulo">{{ inicio()?.heroSubtitulo }}</p>
-          <div class="acciones">
-            @if (sitio.t('hero_boton_primario')) {
-              <a class="boton" [routerLink]="sitio.t('hero_boton_primario_ruta')">{{ sitio.t('hero_boton_primario') }}</a>
-            }
-            @if (sitio.t('hero_boton_secundario')) {
-              <a class="boton secundario" [routerLink]="sitio.t('hero_boton_secundario_ruta')">{{ sitio.t('hero_boton_secundario') }}</a>
-            }
-          </div>
+      <div class="contenedor hero-contenido" [class.con-foto]="inicio()?.heroImagen && !fotoFallo()">
+        <div class="hero-texto">
+          @if (cargando()) {
+            <p>{{ sitio.t('cargando') }}</p>
+          } @else if (error()) {
+            <p>{{ sitio.t('error_carga') }}</p>
+          } @else {
+            <p class="eyebrow">{{ inicio()?.slogan }}</p>
+            <h1>{{ inicio()?.heroTitulo }}</h1>
+            <p class="subtitulo">{{ inicio()?.heroSubtitulo }}</p>
+            <div class="acciones">
+              @if (sitio.t('hero_boton_primario')) {
+                <a class="boton" [routerLink]="sitio.t('hero_boton_primario_ruta')">{{ sitio.t('hero_boton_primario') }}</a>
+              }
+              @if (sitio.t('hero_boton_secundario')) {
+                <a class="boton secundario" [routerLink]="sitio.t('hero_boton_secundario_ruta')">{{ sitio.t('hero_boton_secundario') }}</a>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Foto de portada: ruta guardada en configuracion.hero_imagen -->
+        @if (inicio()?.heroImagen && !fotoFallo()) {
+          <figure class="hero-foto">
+            <img [src]="inicio()?.heroImagen" [alt]="inicio()?.heroImagenAlt || ''" fetchpriority="high" (error)="fotoFallo.set(true)" />
+          </figure>
         }
       </div>
     </section>
@@ -85,7 +94,49 @@ import { Inicio } from '../core/models';
       z-index: 1;
       padding-top: 3rem;
       padding-bottom: 3rem;
-      max-width: 720px;
+    }
+
+    .hero-texto {
+      max-width: 620px;
+    }
+
+    .hero-contenido.con-foto {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-foto {
+      margin: 0;
+      justify-self: end;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 6px solid rgb(245 236 223 / 0.9);
+      box-shadow: 0 24px 50px rgb(0 0 0 / 0.45);
+      transform: rotate(1.5deg);
+    }
+
+    .hero-foto img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+
+    @media (max-width: 800px) {
+      .hero-contenido.con-foto {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .hero-foto {
+        justify-self: center;
+        max-width: 320px;
+        transform: none;
+      }
     }
 
     .hero h1 {
@@ -143,6 +194,8 @@ export class InicioPage implements OnInit {
   protected inicio = signal<Inicio | null>(null);
   protected cargando = signal(true);
   protected error = signal(false);
+  // Si el archivo de la foto no existe, se oculta en vez de mostrar una imagen rota
+  protected fotoFallo = signal(false);
 
   // Tarjetas de acceso rápido: páginas marcadas con mostrar_en_inicio = 1
   protected atajos = computed(() => this.sitio.paginas().filter((p) => p.mostrarEnInicio));

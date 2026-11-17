@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   Sitio,
@@ -9,6 +9,8 @@ import {
   Inicio,
   Nosotros,
   Servicio,
+  ZonaMesas,
+  ReservaPayload,
 } from './models';
 
 // Único punto de acceso del frontend a datos: todo sale de la API Node.js.
@@ -44,6 +46,15 @@ export class ApiService {
 
   enviarContacto(datos: ContactoPayload): Observable<{ id: number; mensaje: string }> {
     return this.http.post<{ id: number; mensaje: string }>(`${this.base}/contactos`, datos);
+  }
+
+  mesas(fecha: string, hora: string): Observable<ZonaMesas[]> {
+    const params = new HttpParams().set('fecha', fecha).set('hora', hora);
+    return this.http.get<ZonaMesas[]>(`${this.base}/mesas`, { params });
+  }
+
+  reservar(datos: ReservaPayload): Observable<{ id: number; mensaje: string }> {
+    return this.http.post<{ id: number; mensaje: string }>(`${this.base}/reservas`, datos);
   }
 
   enviarChat(sesionId: string, mensaje: string): Observable<{ respuesta: string; modelo: string }> {

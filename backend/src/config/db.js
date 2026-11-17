@@ -10,6 +10,7 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   namedPlaceholders: false,
+  dateStrings: true, // DATE/TIME llegan como texto ('2026-11-20', '19:30:00'), sin desfases de zona horaria
   charset: 'utf8mb4',
 });
 

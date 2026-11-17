@@ -5,6 +5,7 @@ import { EspecialidadesPage } from './pages/especialidades.page';
 import { NosotrosPage } from './pages/nosotros.page';
 import { PreciosPage } from './pages/precios.page';
 import { ContactosPage } from './pages/contactos.page';
+import { ReservasPage } from './pages/reservas.page';
 
 // Cada ruta solo indica qué componente se muestra.
 // Etiquetas del menú, títulos y descripciones vienen de la tabla `paginas` (clave `pagina`).
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'especialidades', component: EspecialidadesPage, data: { pagina: 'especialidades' } },
   { path: 'nosotros', component: NosotrosPage, data: { pagina: 'nosotros' } },
   { path: 'precios', component: PreciosPage, data: { pagina: 'precios' } },
+  { path: 'reservas', component: ReservasPage, data: { pagina: 'reservas' } },
   { path: 'contactos', component: ContactosPage, data: { pagina: 'contactos' } },
   { path: '**', redirectTo: '' },
 ];

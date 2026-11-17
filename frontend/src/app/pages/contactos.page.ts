@@ -112,7 +112,7 @@ import { EncabezadoComponent } from '../components/encabezado.component';
     }
 
     .exito {
-      color: #276749;
+      color: var(--exito);
       font-weight: 600;
     }
 
@@ -159,8 +159,8 @@ export class ContactosPage {
         this.form.reset();
         this.enviando.set(false);
       },
-      error: (err) => {
-        this.errorEnvio.set(err?.error?.detalles?.join(' ') || this.sitio.t('form_error_envio'));
+      error: () => {
+        this.errorEnvio.set(this.sitio.t('form_error_envio'));
         this.enviando.set(false);
       },
     });

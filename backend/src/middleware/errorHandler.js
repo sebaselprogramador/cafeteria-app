@@ -12,6 +12,8 @@ function errorHandler(err, req, res, next) {
   }
   res.status(status).json({
     error: status >= 500 ? 'Error interno del servidor' : err.message,
+    // Código estable que el frontend traduce con la tabla `textos`
+    codigo: err.codigo,
   });
 }
 
