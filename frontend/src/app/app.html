@@ -1,0 +1,44 @@
+<header class="cabecera">
+  <div class="contenedor barra">
+    <a routerLink="/" class="marca" (click)="cerrarMenu()">
+      <span class="marca-icono" aria-hidden="true">☕</span>
+      <span>{{ config()?.nombre || 'Cafetería' }}</span>
+    </a>
+
+    <button class="boton-menu" type="button" (click)="alternarMenu()" [attr.aria-expanded]="menuAbierto()" aria-label="Abrir menú">
+      ☰
+    </button>
+
+    <nav class="menu" [class.abierto]="menuAbierto()" aria-label="Principal">
+      @for (enlace of enlaces; track enlace.ruta) {
+        <a [routerLink]="enlace.ruta" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: enlace.ruta === '/' }" (click)="cerrarMenu()">
+          {{ enlace.texto }}
+        </a>
+      }
+    </nav>
+  </div>
+</header>
+
+<main>
+  <router-outlet />
+</main>
+
+<footer class="pie">
+  <div class="contenedor pie-grid">
+    <div>
+      <strong>{{ config()?.nombre || 'Cafetería' }}</strong>
+      <p>{{ config()?.slogan }}</p>
+    </div>
+    <div>
+      <p>📍 {{ config()?.direccion }}</p>
+      <p>📞 {{ config()?.telefono }}</p>
+      <p>✉️ {{ config()?.email }}</p>
+    </div>
+    <div>
+      <p>🕒 {{ config()?.horario }}</p>
+    </div>
+  </div>
+  <p class="derechos">© {{ anio }} {{ config()?.nombre }}. Todos los derechos reservados.</p>
+</footer>
+
+<app-chatbot />
